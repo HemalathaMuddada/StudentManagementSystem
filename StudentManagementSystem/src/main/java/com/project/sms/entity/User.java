@@ -1,8 +1,6 @@
 package com.project.sms.entity;
-
 import java.io.Serializable;
 import java.util.Collection;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,19 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @Table(name = "user_info", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name" }) })
@@ -43,6 +38,9 @@ public class User implements UserDetails, Serializable {
 	@SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
 	@Column(name = "id")
 	private Integer id;
+	
+	/*@Column(name = "user_role_id")
+	private Integer user_role_id;*/
 	
 	@Column(name="user_name")
 	private String username;
@@ -66,6 +64,11 @@ public class User implements UserDetails, Serializable {
 	@JsonIgnore
 	private Collection<Authority> authorities;
 
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn
+	@OrderBy
+	@JsonIgnore
+
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -86,10 +89,6 @@ public class User implements UserDetails, Serializable {
 	public boolean isEnabled() {
 		return true;
 	}
-
-
-
-	
 
 
 }
